@@ -1,0 +1,72 @@
+{
+  "contract_version": "0.1.0",
+  "language_for_humans": "zh-CN",
+  "naming": {
+    "directory_pattern": "中文名称-english-id",
+    "skill_name_field": "english-id",
+    "human_index_required": true
+  },
+  "required_run_directories": [
+    "input",
+    "state",
+    "outputs",
+    "evidence",
+    "logs"
+  ],
+  "required_state_file": "state/run_state.json",
+  "required_first_skill_for_workflows": "checkpoint-runner",
+  "dry_run_default": true,
+  "dry_run_forbidden_actions": [
+    "login_real_system",
+    "download_real_business_file",
+    "upload_file",
+    "import_customer_data",
+    "create_outbound_call_task",
+    "modify_feishu_online_sheet"
+  ],
+  "always_require_human_confirmation": [
+    "create_volcengine_call_task",
+    "upload_or_import_maijing_customer_data",
+    "modify_feishu_online_sheet",
+    "refund",
+    "transfer_store",
+    "batch_dispatch_operations_task"
+  ],
+  "browser_rules": {
+    "coordinate_click_allowed": false,
+    "preferred_targeting": [
+      "text",
+      "label",
+      "role",
+      "placeholder",
+      "dom_attribute",
+      "api_request"
+    ]
+  },
+  "step_status_values": [
+    "not_started",
+    "running",
+    "completed",
+    "pending",
+    "failed",
+    "skipped"
+  ],
+  "error_message_required_fields": [
+    "step_name_cn",
+    "failure_reason",
+    "evidence_paths",
+    "resume_step"
+  ],
+  "workflow_skill_required_sections": [
+    "当前阶段",
+    "输入",
+    "输出",
+    "必须先调用的 skill",
+    "运行目录规范",
+    "步骤状态机",
+    "人工确认点",
+    "dry-run 禁止动作",
+    "失败定位",
+    "可恢复点"
+  ]
+}

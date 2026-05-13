@@ -1,0 +1,69 @@
+{
+  "version": "0.1.0",
+  "status": "source_verified",
+  "notes": [
+    "本文件是迈鲸公海客户筛选条件到 API 参数的源码确认映射。",
+    "依据前端资源 /assets/index.deedcb68.js 中 queryParams 和 Oe() 转换逻辑整理。",
+    "status=verified 前仍建议先跑只读 total 校验，不直接导出。"
+  ],
+  "dynamic_filters": {
+    "city": {
+      "api_param": "cityName",
+      "mode": "csv",
+      "verified": true
+    },
+    "districts": {
+      "api_param": "districtName",
+      "mode": "csv",
+      "verified": true
+    },
+    "categories": {
+      "api_param": "categoryName",
+      "mode": "csv",
+      "verified": true
+    }
+  },
+  "fixed_filters": {
+    "store_entry_status": {
+      "api_param": "poiState",
+      "mode": "csv",
+      "value": "0",
+      "source_label": "未进店",
+      "verified": true
+    },
+    "claim_status": {
+      "api_param": "isInPrivateStr",
+      "mode": "csv",
+      "value": "0",
+      "source_label": "待认领",
+      "verified": true
+    },
+    "has_phone": {
+      "api_param": "hasPhone",
+      "mode": "single",
+      "value": "1",
+      "source_label": "有电话",
+      "verified": true
+    },
+    "store_filter": {
+      "api_param": "storeFilterTags",
+      "mode": "csv",
+      "value": ["0", "2"],
+      "source_label": ["有效", "误杀"],
+      "verified": true
+    },
+    "follow_progress": {
+      "api_param": "followProgress",
+      "mode": "csv",
+      "value": ["未接通", "未跟进"],
+      "verified": true
+    },
+    "store_status": {
+      "api_param": "closeStatus",
+      "mode": "csv",
+      "value": "0",
+      "source_label": "营业中",
+      "verified": true
+    }
+  }
+}

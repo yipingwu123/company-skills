@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-05-13 21:36:07",
+  "threshold": 0.1,
+  "categories": [
+    {
+      "category": "餐饮",
+      "total": 554,
+      "mobile": 179,
+      "landline": 273,
+      "toll_free": 56,
+      "invalid": 46,
+      "mobile_ratio": 0.323,
+      "recommended": true
+    }
+  ]
+}

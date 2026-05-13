@@ -1,0 +1,9 @@
+{
+  "required_columns": ["呼叫时间", "电话客服", "线路状态"],
+  "date_column": "呼叫时间",
+  "allowed_dates": ["2026-05-13"],
+  "default_year": 2026,
+  "min_rows": 1,
+  "non_empty_columns": ["呼叫时间", "电话客服"],
+  "unique_columns": []
+}

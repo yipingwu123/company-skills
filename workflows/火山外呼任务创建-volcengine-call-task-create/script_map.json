@@ -1,0 +1,45 @@
+{
+  "_comment": "品类到话术的映射。Script ID 来自 2026-05-13 QueryScript 侦查结果。",
+  "_note": "Health=false 的话术不可用于新建任务（mtcdb、wdhs）。",
+  "category_to_script": {
+    "餐饮": {
+      "script_id": "llm_fgzo_bifje",
+      "name": "餐饮",
+      "health": true,
+      "requires_params": false,
+      "dynamic_params": {}
+    },
+    "休闲娱乐": {
+      "script_id": "llm_divs_bigai",
+      "name": "休娱和其他",
+      "health": true,
+      "requires_params": false,
+      "dynamic_params": {}
+    },
+    "购物": {
+      "script_id": "llm_mzsi_bigba",
+      "name": "购物",
+      "health": true,
+      "requires_params": false,
+      "dynamic_params": {}
+    },
+    "丽人": {
+      "script_id": "llm_khrs_bifjj",
+      "name": "丽人",
+      "health": true,
+      "requires_params": false,
+      "dynamic_params": {}
+    }
+  },
+  "number_pools": {
+    "塔外": {
+      "pool_no": "250",
+      "number_id": "20260325"
+    },
+    "塔思奇": {
+      "pool_no": "220",
+      "number_id": "20260305"
+    }
+  },
+  "default_number_pool": "塔外"
+}

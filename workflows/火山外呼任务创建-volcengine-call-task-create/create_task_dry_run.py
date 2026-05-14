@@ -246,7 +246,8 @@ def call_create_task(auth_context: dict[str, Any], task_body: dict[str, Any]) ->
         headers["Cookie"] = cookie
 
     url = f"{base_url}{api_base}/CreateTask"
-    payload = json.dumps(task_body).encode("utf-8")
+    payload = json.dumps(task_body, ensure_ascii=False).encode("utf-8")
+    headers.setdefault("Content-Type", "application/json; charset=utf-8")
     req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
     with urllib.request.urlopen(req, timeout=30) as resp:
         return json.loads(resp.read())
@@ -257,6 +258,7 @@ def main() -> None:
     parser.add_argument("--phone-list-json", help="mobile_list_{品类}.json 路径（fetch_phone_by_id 输出，含真实号码）")
     parser.add_argument("--export-file", help="迈鲸导出 xlsx 路径（号码已脱敏，仅 dry-run 用）")
     parser.add_argument("--category", required=True, help="品类名称（如：餐饮、休闲娱乐）")
+    parser.add_argument("--city", default="长沙", help="城市名称，用于任务命名（默认：长沙）")
     parser.add_argument("--task-date", required=True, help="任务执行日期 YYYY-MM-DD")
     parser.add_argument("--number-pool", default="塔外", help="号码池名称")
     parser.add_argument("--concurrency", type=int, default=10, help="并发数")
@@ -322,7 +324,10 @@ def main() -> None:
 
         # 4. 生成任务计划
         checkpoint.update_step(run_dir, "generate_task_plan", "running", "生成任务创建计划")
-        task_name = f"{args.category}-{args.task_date}-{args.batch}"
+        # 任务命名格式：品类-城市-日期(YYYYMMDD)-批次N
+        date_compact = args.task_date.replace("-", "")
+        batch_num = args.batch.lstrip("0") or "1"
+        task_name = f"{args.category}-{args.city}-{date_compact}-批次{batch_num}"
         task_body = build_task_body(
             task_name=task_name,
             script_id=script_info["script_id"],

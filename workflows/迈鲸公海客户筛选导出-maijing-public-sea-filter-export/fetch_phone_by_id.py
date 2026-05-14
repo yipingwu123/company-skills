@@ -185,10 +185,33 @@ def main() -> None:
         )
         checkpoint.update_step(run_dir, "write_phone_list", "completed", f"写入 {len(phone_list)} 个手机号")
 
-        # 4. 筛选移动号
+        # 4. 筛选移动号，并按 poi_code 去重
         checkpoint.update_step(run_dir, "filter_mobile", "running", "筛选移动手机号")
-        mobile_list = [p for p in phone_list if is_mobile(p["Phone"])]
-        # poi_code 传入 mobile_list（导入迈鲸商机时需要）
+        mobile_list_raw = [p for p in phone_list if is_mobile(p["Phone"])]
+
+        # 去重规则：
+        #   - 同一 poi_code 出现多个移动号 → 保留第一个
+        #   - 无 poi_code 的条目 → 按手机号去重（同号只留一条）
+        seen_poi: dict[str, dict] = {}
+        seen_phones_no_poi: set[str] = set()
+        mobile_list: list[dict] = []
+        dedup_skipped = 0
+        for entry in mobile_list_raw:
+            poi = entry.get("poi_code", "").strip()
+            if poi:
+                if poi not in seen_poi:
+                    seen_poi[poi] = entry
+                    mobile_list.append(entry)
+                else:
+                    dedup_skipped += 1
+            else:
+                phone = entry["Phone"]
+                if phone not in seen_phones_no_poi:
+                    seen_phones_no_poi.add(phone)
+                    mobile_list.append(entry)
+                else:
+                    dedup_skipped += 1
+
         mobile_path = run_dir / "outputs" / f"mobile_list_{safe_cat}.json"
         checkpoint.write_json(mobile_path, {
             "category": args.category,
@@ -196,13 +219,16 @@ def main() -> None:
             "mobile_count": len(mobile_list),
             "phone_list": mobile_list,
         })
+        dedup_note = f"，去重 {dedup_skipped} 条（同 POI 多号码保留第一个）" if dedup_skipped else ""
         checkpoint.update_step(
             run_dir, "filter_mobile", "completed",
-            f"移动号 {len(mobile_list)}/{len(phone_list)}（非移动号 {len(phone_list) - len(mobile_list)} 个跳过）",
+            f"移动号 {len(mobile_list)}/{len(phone_list)}（非移动号跳过{dedup_note}）",
         )
-        checkpoint.append_log(run_dir, f"批量拉取完成：{len(phone_list)} 个有效号码，其中移动号 {len(mobile_list)} 个。")
+        checkpoint.append_log(run_dir, f"批量拉取完成：{len(phone_list)} 个有效号码，其中移动号 {len(mobile_list)} 个（去重后）。")
 
-        print(f"\n拉取完成：{len(phone_list)} 个有效号码，移动号 {len(mobile_list)} 个，{len(failed_ids)} 个无号码/失败")
+        print(f"\n拉取完成：{len(phone_list)} 个有效号码，移动号（去重后）{len(mobile_list)} 个，{len(failed_ids)} 个无号码/失败")
+        if dedup_skipped:
+            print(f"已去重：{dedup_skipped} 条（同一门店多个手机号保留第一个）")
         print(f"全部号码：{out_path}")
         print(f"移动号：  {mobile_path}")
         print(f"运行目录：{run_dir}")
